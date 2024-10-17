@@ -45,5 +45,3 @@ root.render(
 		<App />
 	</StrictMode>
 );
-
-// работаем здесь 2

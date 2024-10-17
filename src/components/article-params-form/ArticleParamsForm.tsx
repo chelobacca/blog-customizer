@@ -15,23 +15,22 @@ import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { useRef, useState } from 'react';
 import { Select } from 'src/ui/select/Select';
+import { Text } from 'src/ui/text';
 import { RadioGroup } from 'src/ui/radio-group';
 import { Separator } from 'src/ui/separator';
 import { useOutsideClickClose } from 'src/ui/select/hooks/useOutsideClickClose';
 
 type ArticleParamsFormProps = {
 	setCurrentArticleState: (param: ArticleStateType) => void;
-	currentArticleState: ArticleStateType;
 };
 
 export const ArticleParamsForm = ({
-	currentArticleState,
 	setCurrentArticleState,
 }: ArticleParamsFormProps) => {
 	const [isOpen, setIsOpen] = useState<boolean>(false);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const [selectArticleState, setSelectArticleState] =
-		useState<ArticleStateType>(currentArticleState);
+		useState<ArticleStateType>(defaultArticleState);
 
 	const handleChange = (key: keyof ArticleStateType, value: OptionType) => {
 		setSelectArticleState({ ...selectArticleState, [key]: value });
@@ -39,7 +38,8 @@ export const ArticleParamsForm = ({
 
 	const handleReset = () => {
 		setSelectArticleState(defaultArticleState);
-	}; // Сброс состояния к начальному
+		setCurrentArticleState(defaultArticleState);
+	}; // Сброс состояния формы и статьи к начальному
 
 	useOutsideClickClose({
 		isOpen,
@@ -60,6 +60,9 @@ export const ArticleParamsForm = ({
 						event.preventDefault();
 						setCurrentArticleState(selectArticleState);
 					}}>
+					<Text size={31} weight={800} uppercase={true}>
+						{'Задайте параметры'}
+					</Text>
 					<Select
 						selected={selectArticleState.fontFamilyOption}
 						options={fontFamilyOptions}
@@ -97,7 +100,12 @@ export const ArticleParamsForm = ({
 					/>
 
 					<div className={styles.bottomContainer}>
-						<Button title='Сбросить' onClick={handleReset} type='clear' />
+						<Button
+							title='Сбросить'
+							htmlType='reset'
+							onClick={handleReset}
+							type='clear'
+						/>
 						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
